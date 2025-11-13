@@ -126,6 +126,36 @@ fun ProfileBody() {
                 Text("Follow")
             }
 
+            Row{
+                Text("Recently played",
+
+                    modifier = Modifier.weight(2f))
+
+                Row(
+                    modifier = Modifier.weight(1f),
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    Icon(
+                        painter = painterResource(
+                            R.drawable.baseline_arrow_back_ios_24
+                        ),
+                        contentDescription = null
+                    )
+                    Icon(
+                        painter = painterResource(
+                            R.drawable.baseline_arrow_back_ios_24
+                        ),
+                        contentDescription = null
+                    )
+                    Icon(
+                        painter = painterResource(
+                            R.drawable.baseline_arrow_back_ios_24
+                        ),
+                        contentDescription = null
+                    )
+                }
+            }
+
 
         }
     }
