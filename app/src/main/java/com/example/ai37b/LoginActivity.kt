@@ -81,7 +81,7 @@ fun LoginBody() {
                 .padding(padding)
                 .background(White)
         ) {
-            Spacer(modifier = Modifier.height(50.dp))
+            Spacer(modifier = Modifier.height(80.dp))
 
             Text(
                 "Sign In",
@@ -210,6 +210,7 @@ fun LoginBody() {
             Text(
                 "Forget Password",
                 style = TextStyle(
+                    color = Blue,
                     textAlign = TextAlign.End
                 ),
                 modifier = Modifier
