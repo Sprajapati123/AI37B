@@ -73,6 +73,7 @@ fun RegisterBody(){
     var password by remember { mutableStateOf("") }
     var visibility by remember { mutableStateOf(false) }
     var terms by remember { mutableStateOf(false) }
+
     val context = LocalContext.current
 
 
@@ -224,7 +225,9 @@ fun RegisterBody(){
             }
 
             Button(
-                onClick = {},
+                onClick = {
+
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 15.dp)
