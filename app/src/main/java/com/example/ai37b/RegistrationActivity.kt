@@ -1,8 +1,11 @@
 package com.example.ai37b
 
+import android.app.Activity
 import android.app.DatePickerDialog
+import android.content.Context
 import android.icu.util.Calendar
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -62,19 +65,20 @@ class RegistrationActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-           RegisterBody()
+            RegisterBody()
         }
     }
 }
 
 @Composable
-fun RegisterBody(){
+fun RegisterBody() {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var visibility by remember { mutableStateOf(false) }
     var terms by remember { mutableStateOf(false) }
 
     val context = LocalContext.current
+    val activity = context as Activity
 
 
     val calendar = Calendar.getInstance()
@@ -85,14 +89,19 @@ fun RegisterBody(){
 
     var selectedDate by remember { mutableStateOf("") }
     val datepicker = DatePickerDialog(
-        context,{
-            _,year,month,day->
-            selectedDate = "$year/${month+1}/$day"
+        context, { _, year, month, day ->
+            selectedDate = "$year/${month + 1}/$day"
 
-        },year,month,day
+        }, year, month, day
     )
 
 
+    val sharedPreference = context.getSharedPreferences(
+        "User",
+        Context.MODE_PRIVATE
+    )
+
+    val editor = sharedPreference.edit()
 
     Scaffold { padding ->
         Column(
@@ -149,7 +158,8 @@ fun RegisterBody(){
                     selectedDate = data
                 },
                 modifier = Modifier
-                    .fillMaxWidth().clickable{
+                    .fillMaxWidth()
+                    .clickable {
                         datepicker.show()
                     }
                     .padding(horizontal = 15.dp),
@@ -226,7 +236,26 @@ fun RegisterBody(){
 
             Button(
                 onClick = {
+                    if (!terms) {
+                        Toast.makeText(
+                            context,
+                            "please agree to terms &  conditions",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }else{
+                        editor.putString("email",email)
+                        editor.putString("password",password)
+                        editor.putString("date",selectedDate)
 
+                        editor.apply()
+                        Toast.makeText(
+                            context,
+                            "Success",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        activity.finish()
+
+                    }
                 },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -243,7 +272,7 @@ fun RegisterBody(){
             Text(buildAnnotatedString {
                 append("Already have account? ")
 
-                withStyle(SpanStyle(color = Blue)){
+                withStyle(SpanStyle(color = Blue)) {
                     append("Sign up")
                 }
             }, modifier = Modifier.padding(horizontal = 15.dp, vertical = 10.dp))
@@ -253,6 +282,6 @@ fun RegisterBody(){
 
 @Preview
 @Composable
-fun RegisterPreview(){
+fun RegisterPreview() {
     RegisterBody()
 }
