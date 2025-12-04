@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "391263491066",
+    "firebase_url": "https://ai37b-c583c-default-rtdb.firebaseio.com",
+    "project_id": "ai37b-c583c",
+    "storage_bucket": "ai37b-c583c.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:391263491066:android:fe4c65f6ea03284cca8a43",
+        "android_client_info": {
+          "package_name": "com.example.ai37b"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyABvrx8a6fPtPS4UzhxmN-WWh-pS9o1V2w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
