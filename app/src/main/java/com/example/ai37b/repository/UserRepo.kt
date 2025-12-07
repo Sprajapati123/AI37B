@@ -30,7 +30,7 @@ interface UserRepo {
     )
 
     fun getUserByID(userId: String,
-                    callback: (Boolean, String, UserModel) -> Unit)
+                    callback: (Boolean, String, UserModel?) -> Unit)
 
     fun getAllUser(callback: (Boolean, String,List<UserModel>) -> Unit)
 

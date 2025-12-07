@@ -24,6 +24,13 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun HomeScreen() {
+    data class Products(val image: Int, val name: String)
+    val listData = listOf(
+        Products(R.drawable.face,"Facebook"),
+        Products(R.drawable.gmail,"gmail"),
+        Products(R.drawable.bettafish,"betafish"),
+        Products(R.drawable.cat,"Car"),
+    )
     val images = listOf(
         R.drawable.face,
         R.drawable.gmail,
@@ -55,14 +62,14 @@ fun HomeScreen() {
            Text("Good Afternoon")
 
            LazyRow {
-               items(images.size){index->
+               items(listData.size){index->
                    Column {
                        Image(
-                           painter = painterResource(images[index]),
+                           painter = painterResource(listData[index].image),
                            contentDescription = null,
                            modifier = Modifier.size(70.dp).padding(end = 10.dp)
                        )
-                       Text(names[index])
+                       Text(listData[index].name)
                    }
                }
            }
