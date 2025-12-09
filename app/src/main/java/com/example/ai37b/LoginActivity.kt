@@ -56,6 +56,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.ai37b.model.UserModel
 import com.example.ai37b.ui.theme.AI37BTheme
 import com.example.ai37b.ui.theme.Black
 import com.example.ai37b.ui.theme.Blue
@@ -234,6 +235,7 @@ fun LoginBody() {
 
             Button(
                 onClick = {
+
                    if(localEmail == email && localPassword == password){
                        val intent = Intent(context,
                            DashboardActivity::class.java)

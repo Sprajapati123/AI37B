@@ -51,6 +51,8 @@ class UserRepoImpl : UserRepo {
         model: UserModel,
         callback: (Boolean, String) -> Unit
     ) {
+//        val id = ref.push().key.toString()
+
         ref.child(userId).setValue(model).addOnCompleteListener {
             if (it.isSuccessful) {
                 callback(true, "Registration success")
@@ -78,40 +80,40 @@ class UserRepoImpl : UserRepo {
         callback: (Boolean, String, UserModel?) -> Unit
     ) {
         ref.child(userId)
-            .addValueEventListener(object : ValueEventListener{
+            .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    if(snapshot.exists()){
+                    if (snapshot.exists()) {
                         val user = snapshot.getValue(UserModel::class.java)
-                        if(user != null){
-                            callback(true,"profile fetched",user)
+                        if (user != null) {
+                            callback(true, "profile fetched", user)
                         }
                     }
                 }
 
                 override fun onCancelled(error: DatabaseError) {
-                    callback(false,"${error.message}",null)
+                    callback(false, "${error.message}", null)
                 }
             })
     }
 
     override fun getAllUser(callback: (Boolean, String, List<UserModel>) -> Unit) {
 
-        ref.addValueEventListener(object : ValueEventListener{
+        ref.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                if(snapshot.exists()){
+                if (snapshot.exists()) {
                     var allUsers = mutableListOf<UserModel>()
-                    for(data in snapshot.children){
+                    for (data in snapshot.children) {
                         val user = data.getValue(UserModel::class.java)
-                        if(user != null){
+                        if (user != null) {
                             allUsers.add(user)
                         }
                     }
-                    callback(true,"User fetched",allUsers)
+                    callback(true, "User fetched", allUsers)
                 }
             }
 
             override fun onCancelled(error: DatabaseError) {
-                callback(false,error.message, emptyList())
+                callback(false, error.message, emptyList())
             }
         })
     }
@@ -123,13 +125,13 @@ class UserRepoImpl : UserRepo {
     ) {
         ref.child(userId).updateChildren(model.toMap())
             .addOnCompleteListener {
-            if (it.isSuccessful) {
-                callback(true, "Profile updated successfully")
-            } else {
-                callback(false, "${it.exception?.message}")
+                if (it.isSuccessful) {
+                    callback(true, "Profile updated successfully")
+                } else {
+                    callback(false, "${it.exception?.message}")
 
+                }
             }
-        }
     }
 
     override fun deleteAccount(
