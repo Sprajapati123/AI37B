@@ -54,11 +54,14 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.ai37b.model.UserModel
+import com.example.ai37b.repository.UserRepoImpl
 import com.example.ai37b.ui.theme.AI37BTheme
 import com.example.ai37b.ui.theme.Black
 import com.example.ai37b.ui.theme.Blue
 import com.example.ai37b.ui.theme.PurpleGrey80
 import com.example.ai37b.ui.theme.White
+import com.example.ai37b.viewmodel.UserViewModel
 
 class RegistrationActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -72,6 +75,10 @@ class RegistrationActivity : ComponentActivity() {
 
 @Composable
 fun RegisterBody() {
+
+    val userViewModel = remember { UserViewModel(UserRepoImpl()) }
+
+
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var visibility by remember { mutableStateOf(false) }
@@ -243,17 +250,57 @@ fun RegisterBody() {
                             Toast.LENGTH_SHORT
                         ).show()
                     }else{
-                        editor.putString("email",email)
-                        editor.putString("password",password)
-                        editor.putString("date",selectedDate)
+                        userViewModel.register(email,password){
+                            success,message,userId->
+                            if(success){
+                                var model = UserModel(
+                                    userId = userId,
+                                    firstName = "",
+                                    lastName = "",
+                                    gender = "",
+                                    email = email,
+                                    dob = selectedDate
+                                )
+                                userViewModel.addUserToDatabase(
+                                    userId,model
+                                ){
+                                    success,message->
+                                    if(success){
+                                        Toast.makeText(
+                                            context,
+                                            message,
+                                            Toast.LENGTH_SHORT
+                                        ).show()
 
-                        editor.apply()
-                        Toast.makeText(
-                            context,
-                            "Success",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        activity.finish()
+                                        activity.finish()
+                                    }else{
+                                        Toast.makeText(
+                                            context,
+                                            message,
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    }
+                                }
+                            }else{
+                                Toast.makeText(
+                                    context,
+                                    message,
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        }
+
+//                        editor.putString("email",email)
+//                        editor.putString("password",password)
+//                        editor.putString("date",selectedDate)
+//
+//                        editor.apply()
+//                        Toast.makeText(
+//                            context,
+//                            "Success",
+//                            Toast.LENGTH_SHORT
+//                        ).show()
+//                        activity.finish()
 
                     }
                 },
