@@ -57,11 +57,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.ai37b.model.UserModel
+import com.example.ai37b.repository.UserRepoImpl
 import com.example.ai37b.ui.theme.AI37BTheme
 import com.example.ai37b.ui.theme.Black
 import com.example.ai37b.ui.theme.Blue
 import com.example.ai37b.ui.theme.PurpleGrey80
 import com.example.ai37b.ui.theme.White
+import com.example.ai37b.view.ForgetPasswordActivity
+import com.example.ai37b.viewmodel.UserViewModel
 
 class LoginActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -82,11 +85,9 @@ fun LoginBody() {
 
     val context = LocalContext.current
     val activity = context as Activity
+    val userViewModel = remember { UserViewModel(UserRepoImpl()) }
 
     val sharedPreferences = context.getSharedPreferences("User", Context.MODE_PRIVATE)
-
-    val localEmail :String? = sharedPreferences.getString("email","")
-    val localPassword :String? = sharedPreferences.getString("password","")
 
     Scaffold { padding ->
         Column(
@@ -228,7 +229,11 @@ fun LoginBody() {
                     textAlign = TextAlign.End
                 ),
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .fillMaxWidth().clickable{
+                        val intent = Intent(context, ForgetPasswordActivity::class.java)
+                        context.startActivity(intent)
+
+                    }
                     .padding(horizontal = 15.dp, vertical = 15.dp)
             )
 
@@ -236,20 +241,17 @@ fun LoginBody() {
             Button(
                 onClick = {
 
-                   if(localEmail == email && localPassword == password){
-                       val intent = Intent(context,
-                           DashboardActivity::class.java)
+                    userViewModel.login(email,password){
+                            success,message->
+                        if(success){
+                            val intent = Intent(context, DashboardActivity::class.java)
+                            context.startActivity(intent)
+                            activity?.finish()
+                        }else{
+                            Toast.makeText(context,message, Toast.LENGTH_SHORT).show()
+                        }
+                    }
 
-                       context.startActivity(intent)
-                       activity.finish()
-
-                   }else{
-                       Toast.makeText(
-                           context,
-                           "invalid details",
-                           Toast.LENGTH_SHORT
-                       ).show()
-                   }
 
                 },
                 modifier = Modifier
