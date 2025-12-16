@@ -12,96 +12,63 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.example.ai37b.repository.ProductRepoImpl
+import com.example.ai37b.viewmodel.ProductViewModel
 
 
 @Composable
 fun HomeScreen() {
-    data class Products(val image: Int, val name: String)
-    val listData = listOf(
-        Products(R.drawable.face,"Facebook"),
-        Products(R.drawable.gmail,"gmail"),
-        Products(R.drawable.bettafish,"betafish"),
-        Products(R.drawable.cat,"Car"),
-    )
-    val images = listOf(
-        R.drawable.face,
-        R.drawable.gmail,
-        R.drawable.bettafish,
-        R.drawable.cat,
-        R.drawable.dog,
-        R.drawable.fish,
-        R.drawable.goldfish,
-        R.drawable.guineapig,
-    )
-    val names = listOf(
-        "Facebook",
-        "Gmail",
-        "Bettafish",
-        "Cat",
-        "Dog",
-        "Fish",
-        "Goldfish",
-        "Guineapig",
-    )
-    LazyColumn (
+    val productViewModel = remember { ProductViewModel(ProductRepoImpl()) }
+
+    LaunchedEffect(Unit) {
+        productViewModel.getAllProduct()
+    }
+
+    val products = productViewModel.allProducts.observeAsState(initial = emptyList())
+
+
+    LazyColumn(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
     ) {
-
-       item {
-           Text("Hello")
-           Text("Good Afternoon")
-
-           LazyRow {
-               items(listData.size){index->
-                   Column {
-                       Image(
-                           painter = painterResource(listData[index].image),
-                           contentDescription = null,
-                           modifier = Modifier.size(70.dp).padding(end = 10.dp)
-                       )
-                       Text(listData[index].name)
-                   }
-               }
-           }
-
-          Image(
-              painter = painterResource(R.drawable.banner),
-              contentDescription = null,
-              modifier = Modifier.fillMaxWidth(),
-              contentScale = ContentScale.Crop
-          )
-
-       }
-
-        item {
-            Text("Trending products")
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(2),
-                modifier = Modifier.height(500.dp)
+        items(products.value!!.size){index->
+            var data = products.value!![index]
+            Card(
+                modifier = Modifier.fillMaxWidth()
             ) {
-                items(images.size){index->
-                    Image(
-                        painter = painterResource(images[index]),
-                        contentDescription = null,
-                        modifier = Modifier.size(70.dp).padding(end = 10.dp)
-                    )
-                }
+                Column {
+                    Text(data.name)
+                    Text(data.price.toString())
+                    Text(data.description)
+                    IconButton(onClick = {}) {
+                        Icon(Icons.Default.Edit,contentDescription = null)
+                    }
+                    IconButton(onClick = {
 
+                    }) {
+                        Icon(Icons.Default.Delete,contentDescription = null)
+                    }
+                }
             }
         }
-
-
-
 
     }
 }
