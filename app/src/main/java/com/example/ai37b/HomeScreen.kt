@@ -1,8 +1,10 @@
 package com.example.ai37b
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -27,6 +29,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.ai37b.repository.ProductRepoImpl
@@ -37,6 +40,7 @@ import com.example.ai37b.viewmodel.ProductViewModel
 fun HomeScreen() {
     val productViewModel = remember { ProductViewModel(ProductRepoImpl()) }
 
+    val context = LocalContext.current
     LaunchedEffect(Unit) {
         productViewModel.getAllProduct()
     }
@@ -49,22 +53,45 @@ fun HomeScreen() {
             .fillMaxSize()
             .background(Color.White)
     ) {
-        items(products.value!!.size){index->
+        items(products.value!!.size) { index ->
             var data = products.value!![index]
             Card(
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(15.dp)
             ) {
-                Column {
-                    Text(data.name)
-                    Text(data.price.toString())
-                    Text(data.description)
-                    IconButton(onClick = {}) {
-                        Icon(Icons.Default.Edit,contentDescription = null)
-                    }
-                    IconButton(onClick = {
+                Row(
+                    modifier = Modifier.fillMaxWidth()
+                ) {
 
-                    }) {
-                        Icon(Icons.Default.Delete,contentDescription = null)
+                    Column(
+                        modifier = Modifier.weight(1f).padding(20.dp)
+                    ) {
+                        Text(data.name)
+                        Text(data.price.toString())
+                        Text(data.description)
+
+                    }
+                    Column() {
+                        IconButton(onClick = {}) {
+                            Icon(
+                                Icons.Default.Edit,
+                                contentDescription = null,
+                                tint = Color.Gray
+                            )
+                        }
+                        IconButton(onClick = {
+                            productViewModel.deleteProduct(data.productId) { success, message ->
+                                if (success) {
+                                    Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                                } else {
+                                    Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+
+                                }
+                            }
+                        }) {
+                            Icon(Icons.Default.Delete, contentDescription = null, tint = Color.Red)
+                        }
                     }
                 }
             }
