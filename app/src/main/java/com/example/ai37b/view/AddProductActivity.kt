@@ -57,6 +57,7 @@ fun AddProductBody() {
     val context = LocalContext.current
     val activity = context as Activity
     val productViewModel = remember { ProductViewModel(ProductRepoImpl()) }
+
     Scaffold { padding ->
         LazyColumn(
             modifier = Modifier
@@ -152,7 +153,6 @@ fun AddProductBody() {
                                 activity.finish()
                             }else{
                                 Toast.makeText(context,message,Toast.LENGTH_SHORT).show()
-
                             }
                         }
 
