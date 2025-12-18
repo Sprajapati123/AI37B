@@ -23,6 +23,7 @@ import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
@@ -73,6 +74,7 @@ fun HomeScreen() {
     }
 
     val products = productViewModel.allProducts.observeAsState(initial = emptyList())
+    val loading = productViewModel.loading.observeAsState(initial = false)
 
 
 
@@ -193,55 +195,63 @@ fun HomeScreen() {
 
                 )
             }
+
         }
-        items(products.value!!.size) { index ->
-            var data = products.value!![index]
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(15.dp)
-            ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth()
+        if(loading.value){
+            item {
+                CircularProgressIndicator()
+            }
+        }else{
+            items(products.value!!.size) { index ->
+                var data = products.value!![index]
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(15.dp)
                 ) {
-
-                    Column(
-                        modifier = Modifier
-                            .weight(1f)
-                            .padding(20.dp)
+                    Row(
+                        modifier = Modifier.fillMaxWidth()
                     ) {
-                        Text(data.name)
-                        Text(data.price.toString())
-                        Text(data.description)
 
-                    }
-                    Column() {
-                        IconButton(onClick = {
-                            showDialog = true
-                            productViewModel.getProductById(data.productId)
-                        }) {
-                            Icon(
-                                Icons.Default.Edit,
-                                contentDescription = null,
-                                tint = Color.Gray
-                            )
+                        Column(
+                            modifier = Modifier
+                                .weight(1f)
+                                .padding(20.dp)
+                        ) {
+                            Text(data.name)
+                            Text(data.price.toString())
+                            Text(data.description)
+
                         }
-                        IconButton(onClick = {
-                            productViewModel.deleteProduct(data.productId) { success, message ->
-                                if (success) {
-                                    Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
-                                } else {
-                                    Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
-
-                                }
+                        Column() {
+                            IconButton(onClick = {
+                                showDialog = true
+                                productViewModel.getProductById(data.productId)
+                            }) {
+                                Icon(
+                                    Icons.Default.Edit,
+                                    contentDescription = null,
+                                    tint = Color.Gray
+                                )
                             }
-                        }) {
-                            Icon(Icons.Default.Delete, contentDescription = null, tint = Color.Red)
+                            IconButton(onClick = {
+                                productViewModel.deleteProduct(data.productId) { success, message ->
+                                    if (success) {
+                                        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                                    } else {
+                                        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+
+                                    }
+                                }
+                            }) {
+                                Icon(Icons.Default.Delete, contentDescription = null, tint = Color.Red)
+                            }
                         }
                     }
                 }
             }
         }
+
 
     }
 }
