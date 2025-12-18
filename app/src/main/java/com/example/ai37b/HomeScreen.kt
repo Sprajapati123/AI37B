@@ -55,15 +55,24 @@ fun HomeScreen() {
     var showDialog by remember { mutableStateOf(false) }
 
     val context = LocalContext.current
-    LaunchedEffect(Unit) {
+
+    val data = productViewModel.products.observeAsState(initial = null)
+    var name by remember { mutableStateOf("") }
+    var price by remember { mutableStateOf("") }
+    var desc by remember { mutableStateOf("") }
+
+    LaunchedEffect(data.value) {
         productViewModel.getAllProduct()
+
+        data.value?.let { product->
+            name = product.name
+            price = product.price.toString()
+            desc = product.description
+        }
     }
 
     val products = productViewModel.allProducts.observeAsState(initial = emptyList())
 
-    var name by remember { mutableStateOf("") }
-    var price by remember { mutableStateOf("") }
-    var desc by remember { mutableStateOf("") }
 
 
 
@@ -190,6 +199,7 @@ fun HomeScreen() {
                     Column() {
                         IconButton(onClick = {
                             showDialog = true
+                            productViewModel.getProductById(data.productId)
                         }) {
                             Icon(
                                 Icons.Default.Edit,

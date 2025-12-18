@@ -46,6 +46,7 @@ class AddProductActivity : ComponentActivity() {
             AddProductBody()
         }
     }
+
 }
 
 @Composable
