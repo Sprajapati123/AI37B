@@ -96,7 +96,7 @@ fun HomeScreen() {
                             )
                             productViewModel.updateProduct(model) { success, message ->
                                 if (success) {
-
+                                    showDialog = false
                                     Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
                                 } else {
                                     Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
