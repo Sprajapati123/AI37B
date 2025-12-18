@@ -43,6 +43,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import com.example.ai37b.model.ProductModel
 import com.example.ai37b.repository.ProductRepoImpl
 import com.example.ai37b.ui.theme.Blue
 import com.example.ai37b.ui.theme.PurpleGrey80
@@ -64,7 +65,7 @@ fun HomeScreen() {
     LaunchedEffect(data.value) {
         productViewModel.getAllProduct()
 
-        data.value?.let { product->
+        data.value?.let { product ->
             name = product.name
             price = product.price.toString()
             desc = product.description
@@ -82,10 +83,26 @@ fun HomeScreen() {
             .background(Color.White)
     ) {
         item {
-            if(showDialog){
+            if (showDialog) {
                 AlertDialog(
                     confirmButton = {
-                        TextButton(onClick = {}) {
+                        TextButton(onClick = {
+                            var model = ProductModel(
+                                data.value!!.productId,
+                                name,
+                                price.toDouble(),
+                                desc,
+                                ""
+                            )
+                            productViewModel.updateProduct(model) { success, message ->
+                                if (success) {
+
+                                    Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                                } else {
+                                    Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                                }
+                            }
+                        }) {
                             Text("Update")
                         }
                     },
@@ -189,7 +206,9 @@ fun HomeScreen() {
                 ) {
 
                     Column(
-                        modifier = Modifier.weight(1f).padding(20.dp)
+                        modifier = Modifier
+                            .weight(1f)
+                            .padding(20.dp)
                     ) {
                         Text(data.name)
                         Text(data.price.toString())
