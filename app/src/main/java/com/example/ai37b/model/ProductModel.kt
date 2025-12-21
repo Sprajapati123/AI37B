@@ -5,6 +5,7 @@ data class ProductModel(
     var name : String = "",
     var price : Double = 0.0,
     var description : String = "",
+    var imageUrl : String = "",
     var categoryId : String = ""
 ){
     fun toMap() : Map<String,Any?>{
@@ -12,6 +13,7 @@ data class ProductModel(
             "name" to name,
             "price" to price,
             "description" to description,
+            "imageUrl" to imageUrl,
             "categoryId" to categoryId,
         )
     }
