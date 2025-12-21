@@ -206,7 +206,7 @@ fun AddProductBody(
                                 if (imageUrl != null) {
                                     var model = ProductModel(
                                         "",
-                                        name, price.toDouble(), desc, "", ""
+                                        name, price.toDouble(), desc, imageUrl, ""
                                     )
                                     productViewModel.addProduct(model) { success, message ->
                                         if (success) {

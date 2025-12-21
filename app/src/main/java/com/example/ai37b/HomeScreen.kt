@@ -44,6 +44,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import coil3.compose.AsyncImage
 import com.example.ai37b.model.ProductModel
 import com.example.ai37b.repository.ProductRepoImpl
 import com.example.ai37b.ui.theme.Blue
@@ -212,6 +213,13 @@ fun HomeScreen() {
                     Row(
                         modifier = Modifier.fillMaxWidth()
                     ) {
+                        AsyncImage(
+                            model = data.imageUrl,
+                            contentDescription = null,
+                            modifier = Modifier
+                                .size(100.dp)
+
+                        )
 
                         Column(
                             modifier = Modifier
